@@ -1,0 +1,10 @@
+//808-style sine-based kick, rolling down from 45Hz.
+//Slight audible click is present at the end since amplitude is not specified and therefore ends with default value (i.e. 1).
+
+SinOsc kick => dac;
+45 => kick.freq;
+for(45 => int pit; pit > 20; pit--)
+{
+    pit => kick.freq;
+    45::ms => now;
+}

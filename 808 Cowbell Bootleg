@@ -1,0 +1,18 @@
+SinOsc high => ADSR env => dac;
+SinOsc low => ADSR env2 => dac;
+800 => high.freq;
+540 => low.freq;
+0.5 => high.gain;
+0.5 => low.gain;
+env.set(0.001::second, 0.02::second, 0.5, 0.5::second);
+env2.set(0.001::second, 0.02::second, 0.5, 0.5::second);
+
+while(true)
+{
+    1=> env.keyOn;
+    1=> env2.keyOn;
+    0.5::second => now;
+    1=> env.keyOff;
+    1=> env2.keyOff;
+    0.5::second => now;
+}

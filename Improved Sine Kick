@@ -1,0 +1,11 @@
+SinOsc kick => ADSR env => dac;
+0.3 => kick.gain;
+env.set(0::second, 0.1::second, 0.4, 0.2::second);
+
+    1 => env.keyOn;
+    for(45 => int pit; pit > 20; pit--)
+    {
+        pit => kick.freq;
+        45::ms => now;
+        1 => env.keyOff;
+    }

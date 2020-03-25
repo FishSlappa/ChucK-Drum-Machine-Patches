@@ -1,0 +1,75 @@
+//ROUTING BULLSHIT, IGNORE THIS - DRUM MACHINE COMPONENTS BELOW
+SndBuf dummy1 => Gain master => dac;
+SndBuf dummy2 => master => dac;
+SndBuf dummy3 => master => dac;
+
+me.dir() => string path;
+"dummy1.wav" => string filename;
+path + filename => filename;
+filename => dummy1.read;
+
+me.dir() => string path2;
+"dummy2.wav" => string filename2;
+path2 + filename2 => filename2;
+filename2 => dummy2.read;
+
+me.dir() => string path3;
+"dummy3.wav" => string filename3;
+path3 + filename3 => filename3;
+filename3 => dummy3.read;
+
+
+
+
+
+
+
+
+//GLOBAL PARAMETERS
+//set BPM
+120 => float BPM;
+//set pattern length - for TR series use only 16 or 32
+16 => int pattern_length;
+//set level of master
+0.3 => master.gain;
+//set levels of drums
+0.5 => float Kick_Level;
+0.5 => float Snare_Level;
+0.5 => float Hat_Level;
+
+//INTERNAL MECHANICS - IGNORE THIS
+//converting level to gain
+Kick_Level => dummy1.gain;
+Snare_Level => dummy2.gain;
+Hat_Level => dummy3.gain;
+//converting BPM to note duration
+60/BPM => float crot;
+crot::second => dur crotchet_length;
+
+//infinite loop
+while(true)
+{
+    //16-step sequencer, advances incrementally
+    for (1 => int step; step <= pattern_length; step++)
+    {
+        //currently all steps are active; remove steps to create patterns
+        if(step==1||step==2||step==3||step==4||step==5||step==6||step==7||step==8||step==9||step==10||step==11||step==12||step==13||step==14||step==15||step==16||
+            step==17||step==18||step==19||step==20||step==21||step==22||step==23||step==24||step==25||step==26||step==27||step==28||step==29||step==30||step==31||step==32)
+        {
+           //in each of these drums, the '0 => x.pos' section can be replaced with any other function
+           0 => dummy1.pos;
+        }
+        if(step==1||step==2||step==3||step==4||step==5||step==6||step==7||step==8||step==9||step==10||step==11||step==12||step==13||step==14||step==15||step==16||
+            step==17||step==18||step==19||step==20||step==21||step==22||step==23||step==24||step==25||step==26||step==27||step==28||step==29||step==30||step==31||step==32)
+        {
+           0 => dummy2.pos;
+        }
+        crotchet_length/4 => now;
+        if(step==1||step==2||step==3||step==4||step==5||step==6||step==7||step==8||step==9||step==10||step==11||step==12||step==13||step==14||step==15||step==16||
+            step==17||step==18||step==19||step==20||step==21||step==22||step==23||step==24||step==25||step==26||step==27||step==28||step==29||step==30||step==31||step==32)
+        {
+           0 => dummy3.pos;
+        }
+        crotchet_length/4 => now;
+    }
+}

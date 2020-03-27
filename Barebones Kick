@@ -3,7 +3,7 @@
 SinOsc kick => ADSR mitigate => dac;
 mitigate.set(1::ms, 0::ms, 1, 20::ms);
 
-for(60 => int pitch; pitch > 20; pitch--)
+for(45 => int pitch; pitch > 20; pitch--)
 {
     1 => mitigate.keyOn;
     pitch => kick.freq;

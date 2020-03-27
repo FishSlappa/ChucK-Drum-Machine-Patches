@@ -1,10 +1,16 @@
 //808-style sine-based kick, rolling down from 45Hz.
-//Slight audible click is present at the end since amplitude is not specified and therefore ends with default value (i.e. 1).
 
-SinOsc kick => dac;
-45 => kick.freq;
-for(45 => int pit; pit > 20; pit--)
+SinOsc kick => ADSR mitigate => dac;
+mitigate.set(1::ms, 0::ms, 1, 20::ms);
+
+for(60 => int pitch; pitch > 20; pitch--)
 {
-    pit => kick.freq;
-    45::ms => now;
+    1 => mitigate.keyOn;
+    pitch => kick.freq;
+    40::ms => now;
+    if(pitch == 21)
+    {
+        1 => mitigate.keyOff;
+        20::ms => now;
+    }
 }

@@ -1,0 +1,34 @@
+//ROUTING
+SinOsc kick => ADSR mitigate => LPF kf => Gain decaycontrol => Gain level => Dyno lmt => dac;
+
+//KICK LEVEL
+0.8 => level.gain;
+//KICK TONE
+45 => int Kick_Tone;
+//KICK DECAY
+3 => int Kick_Decay;
+
+//INTERNAL MECHANICS
+Kick_Tone => int fundamental => kick.freq;
+1 => kf.Q;
+16/fundamental => float decaytime;
+Kick_Decay*0.1 => float decay_length;
+1 => int recursion_counter;
+mitigate.set(1::ms, 0::ms, 1, 1::ms);
+lmt.limit();
+
+//PUNCH
+1 => mitigate.keyOn;
+for(2*fundamental => int harmonic; harmonic >= fundamental; harmonic--)
+{
+    harmonic => kf.freq;
+    decaytime::ms => now;
+}
+//DECAY
+for(1000 => int dcontrol; dcontrol > 0; dcontrol--)
+{
+    dcontrol*0.001 => decaycontrol.gain;
+    decay_length*recursion_counter*0.01::ms => now;
+    recursion_counter++;
+}
+1 => mitigate.keyOff;

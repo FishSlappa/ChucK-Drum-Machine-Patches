@@ -1,0 +1,26 @@
+//ROUTING
+Noise wn => Gain submix => HPF sf => dac;
+SinOsc sin => submix => sf => dac;
+
+//SNARE LEVEL
+0.8 => float Snare_Level;
+//SNARE TONE
+200 => int Snare_Tone;
+//SNAPPY
+8 => int Snappy;
+
+//INTERNAL MECHANICS
+0.005 => wn.gain;
+0.2 => sin.gain;
+1000 => sf.freq;
+Snare_Level => submix.gain;
+Snare_Tone => sin.freq;
+1 => int recursion_counter2;
+
+//PUNCH
+for(100 => int gcontrol; gcontrol > 0; gcontrol--)
+{
+    gcontrol*0.01 => submix.gain;
+    recursion_counter2*0.01::ms => now;
+    recursion_counter2 + Snappy => recursion_counter2;
+}
